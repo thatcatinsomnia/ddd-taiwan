@@ -1,14 +1,30 @@
 <template>
   <div class="panel">
-    <h3 class="panel__title">{{ county }}</h3>
+    <h3 class="panel__title">{{ county.name }}</h3>
+    <div class="panel__body">
+      <!-- 
+        loop 3 times, because there are 3 time sessions to render
+      -->
+      <WeatherCard
+        :weather="weather"
+        :index="index"
+        v-for="(weather, index) in county.weather"
+        :key="index"
+      />
+    </div>
   </div>
 </template>
 
 <script>
+import WeatherCard from '@/components/WeatherCard.vue';
+
 export default {
   name: 'Panel',
+  components: {
+    WeatherCard
+  },
   props: {
-    county: String
+    county: Object
   }
 };
 </script>
@@ -17,6 +33,8 @@ export default {
 .panel {
   width: 40%;
   height: 500px;
+  display: flex;
+  flex-direction: column;
   position: absolute;
   top: 20%;
   left: 10%;
@@ -28,6 +46,13 @@ export default {
     padding: 2rem;
     font-size: 6em;
     text-align: center;
+    color: #fff;
+  }
+
+  &__body {
+    padding: 3rem;
+    flex: 1;
+    display: flex;
     color: #fff;
   }
 }

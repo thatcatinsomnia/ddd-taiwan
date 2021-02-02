@@ -71,7 +71,7 @@ export default {
       drawMap();
     });
 
-    onBeforeMount(() => {
+    onBeforeMount(async () => {
       parseCountyData();
     });
 
