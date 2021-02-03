@@ -31,13 +31,13 @@ export default {
 
 <style lang="scss">
 .panel {
-  width: 40%;
-  height: 500px;
+  width: 65rem;
+  height: 42rem;
   display: flex;
   flex-direction: column;
   position: absolute;
   top: 20%;
-  left: 10%;
+  left: 8%;
   background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(8px);
   border-radius: 0.5rem;
@@ -50,9 +50,10 @@ export default {
   }
 
   &__body {
+    margin-top: auto;
     padding: 3rem;
-    flex: 1;
     display: flex;
+    justify-content: space-around;
     color: #fff;
   }
 }

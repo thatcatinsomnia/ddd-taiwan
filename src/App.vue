@@ -70,6 +70,7 @@ export default {
 
     onBeforeMount(async () => {
       weatherData.all = await WeatherService.fetchAll();
+      console.log(weatherData.all);
     });
 
     return {
@@ -95,7 +96,7 @@ export default {
   color: #fff;
   position: absolute;
   top: 8%;
-  left: 10%;
+  left: 8%;
   display: flex;
   align-items: baseline;
 
@@ -104,8 +105,8 @@ export default {
   }
 
   &__hint {
-    margin-left: 6rem;
-    font-size: 2rem;
+    margin-left: 4rem;
+    font-size: 1.6rem;
     animation: twinkle 2100ms linear infinite;
   }
 }
