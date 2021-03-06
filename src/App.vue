@@ -70,7 +70,6 @@ export default {
 
     onBeforeMount(async () => {
       weatherData.all = await WeatherService.fetchAll();
-      console.log(weatherData.all);
     });
 
     return {
@@ -101,13 +100,16 @@ export default {
   align-items: baseline;
 
   &__title {
+    opacity: 0;
     font-size: 5rem;
+    animation: fade-from-bottom 600ms ease-in-out forwards 1600ms;
   }
 
   &__hint {
+    opacity: 0;
     margin-left: 4rem;
     font-size: 1.6rem;
-    animation: twinkle 2100ms linear infinite;
+    animation: fade-from-right 600ms ease-in-out 1600ms, twinkle 2100ms linear infinite 2200ms, ;
   }
 }
 
@@ -122,19 +124,45 @@ export default {
   opacity: 0;
 }
 
+
+@keyframes fade-from-bottom {
+  from {
+    transform: translateY(5rem) rotate(-6deg);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+
+@keyframes fade-from-right {
+  from {
+    transform: translateX(5rem);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 @keyframes twinkle {
   0% {
-    opacity: 0;
+    opacity: 1;
     transform: scale(1);
   }
 
   50% {
-    opacity: 1;
+    opacity: 0;
     transform: scale(1.05);
   }
 
   100% {
-    opacity: 0;
+    opacity: 1;
     transform: scale(1);
   }
 }

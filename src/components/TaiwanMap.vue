@@ -38,7 +38,7 @@ export default {
         .fitSize([map.size.width, map.size.height], taiwan.counties);
 
       map.path = d3.geoPath().projection(map.projection);
-
+      
       d3.select('.taiwan')
         .selectAll('path')
         .data(taiwan.counties.features)
@@ -56,6 +56,25 @@ export default {
 
           const countyName = event.target.getAttribute('data-name');
           emit('showPanel', countyName);
+        });
+      
+      animateSvg(d3.selectAll('path').nodes());
+    };
+
+    const animateSvg = (nodes) => {
+        nodes.forEach(node => {
+          const totalLength = node.getTotalLength();
+          node.style.strokeDasharray = totalLength;
+          node.style.strokeDashoffset = totalLength;
+          node.classList.add('drawing');
+          node.classList.add('is-transparent');
+
+          node.addEventListener('animationend', event => {
+            event.target.style.strokeDasharray = 0;
+            event.target.style.strokeDashoffset = 0;
+            event.target.classList.remove('drawing');
+            event.target.classList.remove('is-transparent');
+          });
         });
     };
 
@@ -94,15 +113,23 @@ export default {
     cursor: pointer;
     stroke: $color-golden;
     fill: lighten($color-background, 5%);
-    transition: all 260ms ease-in-out;
 
     &:hover {
       fill: $color-golden-light;
+    }
+
+    &.is-transparent {
+      fill: transparent;
+
     }
 
     &.is-active {
       fill: $color-golden;
     }
   }
+}
+
+.drawing {
+  animation: draw 2400ms linear forwards 320ms, bg 800ms linear 1800ms;
 }
 </style>
