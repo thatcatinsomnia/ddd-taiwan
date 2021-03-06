@@ -50,16 +50,16 @@ export default {
 
     const isMorning =
       moment(props.weather.wx.startTime).hours() === 6 ? true : false;
-
+    
     const session = computed(() => {
       if (isToday && isMorning) {
         return '今日白天';
-      } else if (isToday && !isMorning) {
-        return '今晚明晨';
       } else if (!isToday && isMorning) {
         return '明日白天';
-      } else {
+      } else if (!isToday && !isMorning && moment(props.weather.wx.startTime).hours() === 18) {
         return '明日晚上';
+      } else {
+        return '今晚明晨';
       }
     });
 
