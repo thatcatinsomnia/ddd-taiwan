@@ -43,24 +43,48 @@ export default {
     index: Number
   },
   setup(props) {
-    const isToday =
-      moment(props.weather.wx.startTime).date() === moment().date()
-        ? true
-        : false;
+    let type = '';
 
-    const isMorning =
-      moment(props.weather.wx.startTime).hours() === 6 ? true : false;
-    
-    const session = computed(() => {
-      if (isToday && isMorning) {
-        return '今日白天';
-      } else if (!isToday && isMorning) {
-        return '明日白天';
-      } else if (!isToday && !isMorning && moment(props.weather.wx.startTime).hours() === 18) {
-        return '明日晚上';
+    /* eslint-disable vue/no-setup-props-destructure */
+    const timeDesc = {
+      'TEM': '今日凌晨',
+      'TD': '今日白天',
+      'TN': '今晚明晨',
+      'TM': '明日白天',
+      'TMN':'明日晚上',
+    };
+
+    const { startTime, endTime } = props.weather.wx;
+    const isStartToday = moment(startTime).date() === moment().date();
+    const isEndToday = moment(endTime).date() === moment().date();
+    const startHour = moment(startTime).hours();
+    const endHour = moment(endTime).hours();
+    const currentHour = moment().hours();
+
+    if (startHour === 18 && endHour === 6 && isStartToday) {
+      // tonight
+      type = 'TN';
+      if (currentHour >= 0 && currentHour < 12) {
+        timeDesc['TN'] = `今日晚上`; 
       } else {
-        return '今晚明晨';
+        timeDesc['TN'] = `今晚明晨`; 
       }
+    } else if (startHour === 6 && endHour === 18 && !isStartToday && !isEndToday) {
+      // tomorrow
+      type = 'TM';
+    } else if (startHour === 12 && endHour === 18 && isStartToday && isEndToday) {
+      // today
+      type = 'TD'
+    } else if (startHour === 18 && endHour === 6 && !isStartToday && !isEndToday) {
+      // tomorrow night
+      type = 'TMN';
+    } else if (startHour === 0 && endHour === 6 && isStartToday && isEndToday) {
+      // today early morning
+      type = 'TEM'
+    }
+  
+    const session = computed(() => {
+      return timeDesc[type];
     });
 
     const iconName = computed(() => {
@@ -68,11 +92,11 @@ export default {
 
       if (weather.includes('雨')) {
         return 'Rainy';
-      } else if (weather.includes('雲') && isMorning) {
+      } else if (weather.includes('雲') && startHour === 6 || startHour === 12) {
         return 'CloudyDay';
-      } else if (weather.includes('雲') && !isMorning) {
+      } else if (weather.includes('雲') && startHour !== 6) {
         return 'CloudyNight';
-      } else if (isMorning) {
+      } else if (startHour === 6) {
         return 'Day';
       } else {
         return 'Night';
