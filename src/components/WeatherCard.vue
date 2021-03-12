@@ -80,9 +80,11 @@ export default {
       type = 'TMN';
     } else if (startHour === 0 && endHour === 6 && isStartToday && isEndToday) {
       // today early morning
-      type = 'TEM'
+      type = 'TEM';
+    } else if (startHour === 0 && endHour === 6 && !isStartToday && !isEndToday) {
+      type = 'TN';
     }
-  
+
     const session = computed(() => {
       return timeDesc[type];
     });
