@@ -74,7 +74,9 @@ export default {
       type = 'TM';
     } else if (startHour === 12 && endHour === 18 && isStartToday && isEndToday) {
       // today
-      type = 'TD'
+      type = 'TD';
+    } else if (startHour === 6 && endHour === 18 && isStartToday && isEndToday) {
+      type = 'TD';
     } else if (startHour === 18 && endHour === 6 && !isStartToday && !isEndToday) {
       // tomorrow night
       type = 'TMN';
